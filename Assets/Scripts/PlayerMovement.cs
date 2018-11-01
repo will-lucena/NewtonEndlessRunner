@@ -99,7 +99,7 @@ public class PlayerMovement : MonoBehaviour {
                 {
                     changeRoad(-1);
                 }
-                else
+                else if (Input.GetTouch(0).position.x > (Screen.width / 3) * 2)
                 {
                     changeRoad(1);
                 }
