@@ -7,8 +7,9 @@ public class PlayerMovement : MonoBehaviour {
     public System.Action<int> obstacleHitNotification;
     public System.Action<int> coinHitNotification;
     public System.Action endGame;
+    public System.Action<int> updateScore;
 
-    private float movementSpeed;
+    public float movementSpeed;
     public float slideSpeed;
     public int lifes;
     public float minSpeed;
@@ -37,12 +38,14 @@ public class PlayerMovement : MonoBehaviour {
     private bool invencible;
     private int blinkingValue;
     private int coinAmount;
+    public float score;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
         boxCollider = GetComponent<BoxCollider>();
+        Track.increaseSpeed += updateSpeed;
     }
 
     private void Start()
@@ -53,10 +56,15 @@ public class PlayerMovement : MonoBehaviour {
         movementSpeed = minSpeed;
         blinkingValue = Shader.PropertyToID("_BlinkingValue");
         coinAmount = 0;
+        score = 0;
     }
 
     private void Update()
     {
+        score += Time.deltaTime * movementSpeed;
+
+        updateScore?.Invoke((int)score);
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             changeRoad(1);
@@ -237,7 +245,7 @@ public class PlayerMovement : MonoBehaviour {
         {
             coinAmount++;
             coinHitNotification?.Invoke(coinAmount);
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
         }
     }
 
@@ -268,5 +276,15 @@ public class PlayerMovement : MonoBehaviour {
         //Shader.SetGlobalFloat(blinkingValue, 0);
         invencible = false;
         model.SetActive(true);
+    }
+
+    private void updateSpeed(float speedModifier)
+    {
+        movementSpeed *= speedModifier;
+        Debug.Log(movementSpeed);
+        if (movementSpeed > maxSpeed)
+        {
+            movementSpeed = maxSpeed;
+        }
     }
 }

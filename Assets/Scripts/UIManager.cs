@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour {
     public Image[] lifeHearts;
     public TextMeshProUGUI coinsLabel;
     public GameObject gameoverPanel;
+    public TextMeshProUGUI scoreLabel;
 
     private PlayerMovement playerScript;
 
@@ -17,6 +18,7 @@ public class UIManager : MonoBehaviour {
         playerScript = FindObjectOfType<PlayerMovement>();
         playerScript.coinHitNotification += updateCoins;
         playerScript.obstacleHitNotification += updateLives;
+        playerScript.updateScore += updateScore;
         playerScript.endGame += endGame;
     }
 
@@ -50,6 +52,11 @@ public class UIManager : MonoBehaviour {
     private void loadMenuScene()
     {
         GameController.instance.loadMenu();
+    }
+
+    private void updateScore(int score)
+    {
+        scoreLabel.SetText(string.Format("Score: {0}m", score));
     }
 
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Track : MonoBehaviour
 {
+    public static System.Action<float> increaseSpeed;
+
     public GameObject[] obstacles;
     public GameObject coinPrefab;
     public List<GameObject> currentObstacles;
@@ -13,6 +15,7 @@ public class Track : MonoBehaviour
     public int maxCoins;
     public int minCoins;
     public float trackLength;
+    public float speedModifier;
 
     private void Awake()
     {
@@ -61,7 +64,7 @@ public class Track : MonoBehaviour
         float minZ = 10f;
         for (int i = 0; i < currentCoins.Count; i++)
         {
-            float posZ = (trackLength / currentObstacles.Count) * 2 * i;
+            float posZ = (trackLength / currentCoins.Count) * 2 * i;
             currentCoins[i].transform.localPosition = new Vector3((int)Random.Range(-1, 2), 0, Random.Range(minZ, minZ + 5));
             currentCoins[i].SetActive(true);
             minZ = posZ + 1;
@@ -72,6 +75,7 @@ public class Track : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            increaseSpeed?.Invoke(speedModifier);
             transform.position = new Vector3(0, 0, transform.position.z + trackLength * 2);
             spawnObstacles();
             spawnCoins();
