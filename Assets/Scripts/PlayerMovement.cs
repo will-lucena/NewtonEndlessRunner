@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour {
 
     public System.Action<int> obstacleHitNotification;
     public System.Action<int> coinHitNotification;
+    public System.Action endGame;
 
     private float movementSpeed;
     public float slideSpeed;
@@ -60,7 +61,7 @@ public class PlayerMovement : MonoBehaviour {
         {
             changeRoad(1);
         }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             changeRoad(-1);
         }
@@ -223,7 +224,9 @@ public class PlayerMovement : MonoBehaviour {
             obstacleHitNotification?.Invoke(currentLife);
             if (currentLife == 0)
             {
-                //game over
+                movementSpeed = 0;
+                animator.SetBool("Dead", true);
+                endGame?.Invoke();
             }
             else
             {

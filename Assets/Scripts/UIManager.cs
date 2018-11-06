@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour {
 
     public Image[] lifeHearts;
     public TextMeshProUGUI coinsLabel;
+    public GameObject gameoverPanel;
 
     private PlayerMovement playerScript;
 
@@ -16,6 +17,7 @@ public class UIManager : MonoBehaviour {
         playerScript = FindObjectOfType<PlayerMovement>();
         playerScript.coinHitNotification += updateCoins;
         playerScript.obstacleHitNotification += updateLives;
+        playerScript.endGame += endGame;
     }
 
     public void updateLives(int currentLifes)
@@ -37,4 +39,17 @@ public class UIManager : MonoBehaviour {
     {
         coinsLabel.SetText(string.Format("x{0}", amount));
     }
+
+    private void endGame()
+    {
+        gameoverPanel.SetActive(true);
+        Invoke("loadMenuScene", 2f);
+        
+    }
+
+    private void loadMenuScene()
+    {
+        GameController.instance.loadMenu();
+    }
+
 }
