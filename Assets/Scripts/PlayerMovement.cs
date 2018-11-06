@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 
-    public System.Action<int> hitNotification;
+    public System.Action<int> obstacleHitNotification;
+    public System.Action<int> coinHitNotification;
 
     private float movementSpeed;
     public float slideSpeed;
@@ -34,6 +35,7 @@ public class PlayerMovement : MonoBehaviour {
     private int currentLife;
     private bool invencible;
     private int blinkingValue;
+    private int coinAmount;
 
     private void Awake()
     {
@@ -49,6 +51,7 @@ public class PlayerMovement : MonoBehaviour {
         currentLife = lifes;
         movementSpeed = minSpeed;
         blinkingValue = Shader.PropertyToID("_BlinkingValue");
+        coinAmount = 0;
     }
 
     private void Update()
@@ -217,7 +220,7 @@ public class PlayerMovement : MonoBehaviour {
             currentLife--;
             animator.SetTrigger("Hit");
             movementSpeed = 0;
-            hitNotification?.Invoke(currentLife);
+            obstacleHitNotification?.Invoke(currentLife);
             if (currentLife == 0)
             {
                 //game over
@@ -226,6 +229,12 @@ public class PlayerMovement : MonoBehaviour {
             {
                 StartCoroutine(invencibleRoutine(invencibleTime));
             }
+        }
+        else if (other.CompareTag("Coin"))
+        {
+            coinAmount++;
+            coinHitNotification?.Invoke(coinAmount);
+            Destroy(other.gameObject);
         }
     }
 

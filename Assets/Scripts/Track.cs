@@ -5,21 +5,38 @@ using UnityEngine;
 public class Track : MonoBehaviour
 {
     public GameObject[] obstacles;
+    public GameObject coinPrefab;
     public List<GameObject> currentObstacles;
+    public List<GameObject> currentCoins;
     public int minObstaclesAmount;
     public int maxObstaclesAmount;
+    public int maxCoins;
+    public int minCoins;
     public float trackLength;
 
     private void Awake()
     {
         int obstaclesAmount = Random.Range(minObstaclesAmount, maxObstaclesAmount);
+        int coinsAmount = Random.Range(minCoins, maxCoins);
 
         for (int i = 0; i < obstaclesAmount; i++)
         {
-            currentObstacles.Add(Instantiate(obstacles[Random.Range(0, obstacles.Length-1)], transform));
-            currentObstacles[i].SetActive(false);
+            GameObject selectedPrefab = obstacles[Random.Range(0, obstacles.Length - 1)];
+            GameObject go = Instantiate(selectedPrefab, transform);
+            go.SetActive(false);
+            go.name = selectedPrefab.name;
+            currentObstacles.Add(go);
         }
+
+        for (int i = 0; i < coinsAmount; i++)
+        {
+            GameObject go = Instantiate(coinPrefab, transform);
+            go.SetActive(false);
+            currentCoins.Add(go);
+        }
+
         spawnObstacles();
+        spawnCoins();
     }
 
     private void spawnObstacles()
@@ -27,8 +44,27 @@ public class Track : MonoBehaviour
         for (int i = 0; i < currentObstacles.Count; i++)
         {
             float posZ = (trackLength / currentObstacles.Count) * 2 * i;
-            currentObstacles[i].transform.localPosition = new Vector3(0, 0, Random.Range(posZ, posZ + 1));
+            Vector3 spawnPosition = new Vector3(0, 0, Random.Range(posZ, posZ + 1));
+
+            if (currentObstacles[i].name.Equals("ObstacleBin"))
+            {
+                spawnPosition.x = (int)Random.Range(-1, 2);
+            }
+
+            currentObstacles[i].transform.localPosition = spawnPosition;
             currentObstacles[i].SetActive(true);
+        }
+    }
+
+    private void spawnCoins()
+    {
+        float minZ = 10f;
+        for (int i = 0; i < currentCoins.Count; i++)
+        {
+            float posZ = (trackLength / currentObstacles.Count) * 2 * i;
+            currentCoins[i].transform.localPosition = new Vector3((int)Random.Range(-1, 2), 0, Random.Range(minZ, minZ + 5));
+            currentCoins[i].SetActive(true);
+            minZ = posZ + 1;
         }
     }
 
@@ -37,7 +73,8 @@ public class Track : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             transform.position = new Vector3(0, 0, transform.position.z + trackLength * 2);
-            Invoke("spawnObstacles", 5f);
+            spawnObstacles();
+            spawnCoins();
         }
     }
 }

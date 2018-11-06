@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour {
 
     public Image[] lifeHearts;
+    public TextMeshProUGUI coinsLabel;
+
     private PlayerMovement playerScript;
 
     private void Start()
     {
         playerScript = FindObjectOfType<PlayerMovement>();
-        playerScript.hitNotification += updateLives;
+        playerScript.coinHitNotification += updateCoins;
+        playerScript.obstacleHitNotification += updateLives;
     }
 
     public void updateLives(int currentLifes)
@@ -27,5 +31,10 @@ public class UIManager : MonoBehaviour {
                 lifeHearts[i].color = Color.clear;
             }
         }
+    }
+
+    public void updateCoins(int amount)
+    {
+        coinsLabel.SetText(string.Format("x{0}", amount));
     }
 }
