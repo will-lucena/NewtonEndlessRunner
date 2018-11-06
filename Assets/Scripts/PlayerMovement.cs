@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour {
     private int currentLife;
     private bool invencible;
     private int blinkingValue;
-    private int coinAmount;
+    public int coinAmount;
     public float score;
 
     private void Awake()
