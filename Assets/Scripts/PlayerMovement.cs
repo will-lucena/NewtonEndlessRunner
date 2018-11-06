@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 
-    public float movementSpeed;
+    public System.Action<int> hitNotification;
+
+    private float movementSpeed;
     public float slideSpeed;
+    public int lifes;
+    public float minSpeed;
+    public float maxSpeed;
+    public float invencibleTime;
     
     public float jumpLength;
     public float jumpHeight;
     public float slideLength;
+    public GameObject model;
 
     private Rigidbody rb;
     private Animator animator;
@@ -24,6 +31,9 @@ public class PlayerMovement : MonoBehaviour {
     private Vector3 boxColliderSize;
     private bool isSwiping;
     private Vector2 startTouch;
+    private int currentLife;
+    private bool invencible;
+    private int blinkingValue;
 
     private void Awake()
     {
@@ -36,6 +46,9 @@ public class PlayerMovement : MonoBehaviour {
     {
         boxColliderSize = boxCollider.size;
         animator.Play("runStart");
+        currentLife = lifes;
+        movementSpeed = minSpeed;
+        blinkingValue = Shader.PropertyToID("_BlinkingValue");
     }
 
     private void Update()
@@ -191,5 +204,57 @@ public class PlayerMovement : MonoBehaviour {
             boxCollider.size = newSize;
             sliding = true;
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (invencible)
+        {
+            return;
+        }
+        if (other.CompareTag("Obstacle"))
+        {
+            currentLife--;
+            animator.SetTrigger("Hit");
+            movementSpeed = 0;
+            hitNotification?.Invoke(currentLife);
+            if (currentLife == 0)
+            {
+                //game over
+            }
+            else
+            {
+                StartCoroutine(invencibleRoutine(invencibleTime));
+            }
+        }
+    }
+
+    private IEnumerator invencibleRoutine(float time)
+    {
+        invencible = true;
+        float timer = 0;
+        float currentBlink = 1f;
+        float lastBlink = 0;
+        float blinkPeriod = 0.1f;
+        bool enabled = false;
+        yield return new WaitForSeconds(1f);
+        movementSpeed = minSpeed;
+        while(timer < time && invencible)
+        {
+            model.SetActive(enabled);
+            //Shader.SetGlobalFloat(blinkingValue, currentBlink);
+            yield return null;
+            timer += Time.deltaTime;
+            lastBlink += Time.deltaTime;
+            if (blinkPeriod < lastBlink)
+            {
+                lastBlink = 0;
+                currentBlink = 1f - currentBlink;
+                enabled = !enabled;
+            }
+        }
+        //Shader.SetGlobalFloat(blinkingValue, 0);
+        invencible = false;
+        model.SetActive(true);
     }
 }
