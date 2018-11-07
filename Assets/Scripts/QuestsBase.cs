@@ -19,7 +19,13 @@ public abstract class QuestsBase : MonoBehaviour
     {
         return progress + currentProgress >= max;
     }
+}
 
+public enum QuestsType
+{
+    SingleRun,
+    TotalDistance,
+    FishesSingleRun
 }
 
 public class SingleRun : QuestsBase
@@ -70,7 +76,7 @@ public class TotalDistance : QuestsBase
 
     public override string getDescription()
     {
-        return string.Format("Corra {0}m em uma corrida", max);
+        return string.Format("Corra {0}m no total", max);
     }
 
     public override void run()

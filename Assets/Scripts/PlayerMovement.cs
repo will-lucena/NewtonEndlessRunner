@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviour {
         blinkingValue = Shader.PropertyToID("_BlinkingValue");
         coinAmount = 0;
         score = 0;
+        GameController.instance.startQuestsCount();
     }
 
     private void Update()
