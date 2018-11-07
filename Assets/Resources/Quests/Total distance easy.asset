@@ -11,7 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa414e53aa2b40d48af3e633c8334228, type: 3}
   m_Name: Total distance easy
   m_EditorClassIdentifier: 
-  isCompleted: 0
-  goal: 0
-  reward: 0
-  type: 0
+  id: 2
+  goal: 10000
+  reward: 100
+  totalProgress: 622
+  type: 1

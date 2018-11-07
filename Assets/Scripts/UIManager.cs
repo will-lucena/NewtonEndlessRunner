@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIManager : MonoBehaviour {
-
+public class UIManager : MonoBehaviour
+{
     public Image[] lifeHearts;
     public TextMeshProUGUI coinsLabel;
     public GameObject gameoverPanel;
@@ -54,5 +54,4 @@ public class UIManager : MonoBehaviour {
     {
         scoreLabel.SetText(string.Format("Score: {0}m", (int)score));
     }
-
 }

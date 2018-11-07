@@ -1,4 +1,6 @@
-﻿public class Quest
+﻿using UnityEngine;
+
+public class Quest
 {
     private int currentProgress;
     private QuestSO data;
@@ -9,14 +11,9 @@
         this.data = data;
     }
 
-    public bool isMissionFinished()
-    {
-        return currentProgress >= data.goal;
-    }
-
     public int getProgress()
     {
-        return data.totalProgress;
+        return currentProgress > data.totalProgress ? currentProgress : data.totalProgress;
     }
 
     public void setProgress(int progress)
@@ -56,6 +53,7 @@
 
     public void addProgress()
     {
+        Debug.Log(currentProgress);
         data.totalProgress += currentProgress;
     }
 }

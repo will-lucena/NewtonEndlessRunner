@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
@@ -46,21 +45,23 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
+        filePath = Application.persistentDataPath + "/gameData.data";
+
         if (instance == null)
         {
             instance = this;
         }
-        else if (instance != this)
+
+        if (instance != this)
         {
             Destroy(gameObject);
         }
+        else
+        {
+            availableQuests = loadAvailableQuests();
+            generateQuests();
+        }
         DontDestroyOnLoad(gameObject);
-
-        filePath = Application.persistentDataPath + "/gameData.data";
-
-        availableQuests = loadAvailableQuests();
-
-        generateQuests();
     }
 
     public void updateUI(UIComponent key, float valor)
@@ -91,7 +92,6 @@ public class GameController : MonoBehaviour
 
         if (File.Exists(filePath))
         {
-            Debug.Log(filePath);
             load();
         }
         else
@@ -105,7 +105,8 @@ public class GameController : MonoBehaviour
 
     public void generateQuest(int i)
     {
-        quests[i] = new Quest(availableQuests[Random.Range(0, availableQuests.Count)]);
+        QuestSO selectedQuest = availableQuests[Random.Range(0, availableQuests.Count)];
+        quests[i] = new Quest(selectedQuest);
     }
 
     public void endGame(int coins, int progress)

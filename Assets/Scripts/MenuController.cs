@@ -17,7 +17,7 @@ public class MenuController : MonoBehaviour
         updateQuestsInfos();
     }
 
-    public void loadGame()
+    public void goToGame()
     {
         SceneManager.LoadScene(1);
     }
@@ -31,26 +31,25 @@ public class MenuController : MonoBehaviour
     {
         for (int i = 0; i < descriptionLabels.Length; i++)
         {
-            
             Quest quest = GameController.instance.getQuest(i);
             descriptionLabels[i].SetText(quest.getDescription());
             progressLabels[i].SetText(string.Format("Progress: {0}/{1}", quest.getProgress(), quest.getGoal()));
             rewardLabels[i].SetText(string.Format("Reward: {0}", quest.getReward()));
 
-            if (quest.isMissionFinished())
+            if (quest.isCompleted())
             {
                 rewardButtons[i].SetActive(true);
             }
         }
-        GameController.instance.save();
+        updateCoinsLabel(GameController.instance.totalCoins);
     }
 
     public void getReward(int index)
     {
         GameController.instance.totalCoins += GameController.instance.getQuest(index).getReward();
-        updateCoinsLabel(GameController.instance.totalCoins);
         rewardButtons[index].SetActive(false);
         GameController.instance.generateQuest(index);
+        GameController.instance.save();
         updateQuestsInfos();
     }
 }
