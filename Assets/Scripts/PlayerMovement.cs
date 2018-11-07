@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour {
     public System.Action endGame;
     public System.Action<int> updateScore;
 
-    public float movementSpeed;
+    private float movementSpeed;
     public float slideSpeed;
     public int lifes;
     public float minSpeed;
@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour {
     private Animator animator;
     private BoxCollider boxCollider;
     
-    private int currentRoad;
+    private int currentRoad = 1;
     private Vector3 movementVector;
     private bool jumping;
     private float jumpStart;
@@ -37,8 +37,9 @@ public class PlayerMovement : MonoBehaviour {
     private int currentLife;
     private bool invencible;
     private int blinkingValue;
-    public int coinAmount;
-    public float score;
+    [HideInInspector] public int coinAmount;
+    [HideInInspector] public float score;
+    private bool canMove;
 
     private void Awake()
     {
@@ -51,17 +52,28 @@ public class PlayerMovement : MonoBehaviour {
     private void Start()
     {
         boxColliderSize = boxCollider.size;
-        animator.Play("runStart");
         currentLife = lifes;
-        movementSpeed = minSpeed;
         blinkingValue = Shader.PropertyToID("_BlinkingValue");
         coinAmount = 0;
         score = 0;
         GameController.instance.startQuestsCount();
+        Invoke("run", 3);
+    }
+
+    private void run()
+    {
+        animator.Play("runStart");
+        movementSpeed = minSpeed;
+        canMove = true;
     }
 
     private void Update()
     {
+        if (!canMove)
+        {
+            return;
+        }
+
         score += Time.deltaTime * movementSpeed;
 
         updateScore?.Invoke((int)score);
@@ -83,7 +95,7 @@ public class PlayerMovement : MonoBehaviour {
         {
             slide();
         }
-
+        /*
         if (Input.touchCount == 1)
         {
             if (isSwiping)
@@ -142,6 +154,7 @@ public class PlayerMovement : MonoBehaviour {
                 isSwiping = false;
             }
         }
+        /**/
 
         if (jumping)
         {
@@ -230,6 +243,7 @@ public class PlayerMovement : MonoBehaviour {
             currentLife--;
             animator.SetTrigger("Hit");
             movementSpeed = 0;
+            canMove = false;
             obstacleHitNotification?.Invoke(currentLife);
             if (currentLife == 0)
             {
@@ -239,6 +253,7 @@ public class PlayerMovement : MonoBehaviour {
             }
             else
             {
+                Invoke("move", 0.75f);
                 StartCoroutine(invencibleRoutine(invencibleTime));
             }
         }
@@ -248,6 +263,11 @@ public class PlayerMovement : MonoBehaviour {
             coinHitNotification?.Invoke(coinAmount);
             other.gameObject.SetActive(false);
         }
+    }
+
+    private void move()
+    {
+        canMove = true;
     }
 
     private IEnumerator invencibleRoutine(float time)

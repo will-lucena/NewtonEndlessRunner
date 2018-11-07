@@ -24,7 +24,7 @@ public class Track : MonoBehaviour
 
         for (int i = 0; i < obstaclesAmount; i++)
         {
-            GameObject selectedPrefab = obstacles[Random.Range(0, obstacles.Length - 1)];
+            GameObject selectedPrefab = obstacles[Random.Range(0, obstacles.Length)];
             GameObject go = Instantiate(selectedPrefab, transform);
             go.SetActive(false);
             go.name = selectedPrefab.name;
@@ -44,18 +44,18 @@ public class Track : MonoBehaviour
 
     private void spawnObstacles()
     {
-        for (int i = 0; i < currentObstacles.Count; i++)
+        for (int index = 1; index < currentObstacles.Count; index++)
         {
-            float posZ = (trackLength / currentObstacles.Count) * 2 * i;
+            float posZ = (trackLength / currentObstacles.Count) * 2 * index;
             Vector3 spawnPosition = new Vector3(0, 0, Random.Range(posZ, posZ + 1));
 
-            if (currentObstacles[i].name.Equals("ObstacleBin"))
+            if (currentObstacles[index].name.Equals("ObstacleBin"))
             {
                 spawnPosition.x = (int)Random.Range(-1, 2);
             }
 
-            currentObstacles[i].transform.localPosition = spawnPosition;
-            currentObstacles[i].SetActive(true);
+            currentObstacles[index].transform.localPosition = spawnPosition;
+            currentObstacles[index].SetActive(true);
         }
     }
 

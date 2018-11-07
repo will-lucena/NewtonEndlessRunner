@@ -62,7 +62,11 @@ public class GameController : MonoBehaviour {
 
     private void generateQuest(int i)
     {
-        Destroy(quests[i].gameObject);
+        if (quests[i] != null)
+        {
+            Destroy(quests[i].gameObject);
+        }
+        
 
         GameObject go = new GameObject("Quest" + i);
         go.transform.SetParent(transform);
