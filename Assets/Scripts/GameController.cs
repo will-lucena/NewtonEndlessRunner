@@ -39,7 +39,7 @@ public class GameController : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
 
         filePath = Application.persistentDataPath + "/gameData.data";
-
+        MenuController.generateNewQuest += generateQuest;
         generateQuests();
     }
 
@@ -55,29 +55,36 @@ public class GameController : MonoBehaviour {
         {
             for (int i = 0; i < quests.Length; i++)
             {
-                GameObject go = new GameObject("Quest" + i);
-                go.transform.SetParent(transform);
-                QuestsType[] types = { QuestsType.SingleRun, QuestsType.FishesSingleRun, QuestsType.TotalDistance };
-
-                switch (types[Random.Range(0, types.Length)])
-                {
-                    case QuestsType.SingleRun:
-                        var script = go.AddComponent<SingleRun>();
-                        script.created();
-                        quests[i] = script;
-                        break;
-                    case QuestsType.FishesSingleRun:
-                        var script1 = go.AddComponent<FishesSingleRun>();
-                        script1.created();
-                        quests[i] = script1;
-                        break;
-                    case QuestsType.TotalDistance:
-                        var script2 = go.AddComponent<TotalDistance>();
-                        script2.created();
-                        quests[i] = script2;
-                        break;
-                }
+                generateQuest(i);
             }
+        }
+    }
+
+    private void generateQuest(int i)
+    {
+        Destroy(quests[i].gameObject);
+
+        GameObject go = new GameObject("Quest" + i);
+        go.transform.SetParent(transform);
+        QuestsType[] types = { QuestsType.SingleRun, QuestsType.FishesSingleRun, QuestsType.TotalDistance };
+
+        switch (types[Random.Range(0, types.Length)])
+        {
+            case QuestsType.SingleRun:
+                var script = go.AddComponent<SingleRun>();
+                script.created();
+                quests[i] = script;
+                break;
+            case QuestsType.FishesSingleRun:
+                var script1 = go.AddComponent<FishesSingleRun>();
+                script1.created();
+                quests[i] = script1;
+                break;
+            case QuestsType.TotalDistance:
+                var script2 = go.AddComponent<TotalDistance>();
+                script2.created();
+                quests[i] = script2;
+                break;
         }
     }
 
