@@ -5,25 +5,30 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Linq;
 using Random = UnityEngine.Random;
 
 [Serializable]
 public class PlayerData
 {
     public int coinsCollected;
-    public int[] questMax;
-    public int[] questProgress;
-    public int[] questReward;
-    public int[] questCurrentProgress;
-    public string[] questType;
+    public List<int> questIds;
+
+    public PlayerData()
+    {
+        questIds = new List<int>();
+        coinsCollected = 0;
+    }
+
 }
 
-public class GameController : MonoBehaviour {
-
+public class GameController : MonoBehaviour
+{
     public static GameController instance;
     public int totalCoins;
 
-    private QuestsBase[] quests;
+    private Quest[] quests;
+    public List<QuestSO> availableQuests;
     private string filePath;
 
     private void Awake()
@@ -40,15 +45,25 @@ public class GameController : MonoBehaviour {
 
         filePath = Application.persistentDataPath + "/gameData.data";
         MenuController.generateNewQuest += generateQuest;
+
+        availableQuests = loadAvailableQuests();
+
         generateQuests();
+    }
+
+    private List<QuestSO> loadAvailableQuests()
+    {
+        List<QuestSO> list = Resources.LoadAll<QuestSO>("Quests/").ToList();
+        return list.FindAll(item => item.isCompleted() == false);
     }
 
     private void generateQuests()
     {
-        quests = new QuestsBase[2];
+        quests = new Quest[2];
 
         if (File.Exists(filePath))
         {
+            Debug.Log(filePath);
             load();
         }
         else
@@ -62,33 +77,21 @@ public class GameController : MonoBehaviour {
 
     private void generateQuest(int i)
     {
-        if (quests[i] != null)
-        {
-            Destroy(quests[i].gameObject);
-        }
-        
+        quests[i] = new Quest(availableQuests[Random.Range(0, availableQuests.Count)]);
+    }
 
-        GameObject go = new GameObject("Quest" + i);
-        go.transform.SetParent(transform);
-        QuestsType[] types = { QuestsType.SingleRun, QuestsType.FishesSingleRun, QuestsType.TotalDistance };
+    public void endGame(int coins, int progress)
+    {
+        totalCoins += coins;
+        updatedQuestsProgress(progress);
+        save();
+    }
 
-        switch (types[Random.Range(0, types.Length)])
+    private void updatedQuestsProgress(int progress)
+    {
+        foreach(Quest quest in quests)
         {
-            case QuestsType.SingleRun:
-                var script = go.AddComponent<SingleRun>();
-                script.created();
-                quests[i] = script;
-                break;
-            case QuestsType.FishesSingleRun:
-                var script1 = go.AddComponent<FishesSingleRun>();
-                script1.created();
-                quests[i] = script1;
-                break;
-            case QuestsType.TotalDistance:
-                var script2 = go.AddComponent<TotalDistance>();
-                script2.created();
-                quests[i] = script2;
-                break;
+            quest.setProgress(progress);
         }
     }
 
@@ -97,25 +100,20 @@ public class GameController : MonoBehaviour {
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream file = File.Create(filePath);
 
-        PlayerData dataToSave = new PlayerData();
-        dataToSave.coinsCollected = totalCoins;
-
-        dataToSave.questMax = new int[2];
-        dataToSave.questCurrentProgress = new int[2];
-        dataToSave.questProgress = new int[2];
-        dataToSave.questReward = new int[2];
-        dataToSave.questType = new string[2];
+        PlayerData data = new PlayerData();
+        data.coinsCollected = totalCoins;
 
         for (int i = 0; i < quests.Length; i++)
         {
-            dataToSave.questMax[i] = quests[i].max;
-            dataToSave.questCurrentProgress[i] = quests[i].currentProgress;
-            dataToSave.questProgress[i] = quests[i].progress;
-            dataToSave.questReward[i] = quests[i].reward;
-            dataToSave.questType[i] = quests[i].type.ToString();
+            if (quests[i].getType() == QuestType.TotalDistance)
+            {
+                quests[i].addProgress();
+            }
+
+            data.questIds.Add(quests[i].getId());
         }
 
-        formatter.Serialize(file, dataToSave);
+        formatter.Serialize(file, data);
         file.Close();
     }
 
@@ -128,37 +126,9 @@ public class GameController : MonoBehaviour {
         file.Close();
         totalCoins = data.coinsCollected;
 
-        for (int i = 0; i < data.questMax.Length; i++)
+        for (int i = 0; i < data.questIds.Count; i++)
         {
-            GameObject go = new GameObject("Quest" + i);
-            go.transform.SetParent(transform);
-            QuestsType[] types = { QuestsType.SingleRun, QuestsType.FishesSingleRun, QuestsType.TotalDistance };
-
-            QuestsBase script;
-
-            if (data.questType[i].Equals(QuestsType.SingleRun.ToString()))
-            {
-                script = go.AddComponent<SingleRun>();
-                script.type = QuestsType.SingleRun;
-                quests[i] = script;
-            }
-            else if (data.questType[i].Equals(QuestsType.TotalDistance.ToString()))
-            {
-                script = go.AddComponent<TotalDistance>();
-                script.type = QuestsType.TotalDistance;
-                quests[i] = script;
-            }
-            else if (data.questType[i].Equals(QuestsType.FishesSingleRun.ToString()))
-            {
-                script = go.AddComponent<FishesSingleRun>();
-                script.type = QuestsType.FishesSingleRun;
-                quests[i] = script;
-            }
-
-            quests[i].max = data.questMax[i];
-            quests[i].currentProgress = data.questCurrentProgress[i];
-            quests[i].progress = data.questProgress[i];
-            quests[i].reward = data.questReward[i];
+            quests[i] = new Quest(availableQuests.Find(item => item.id == data.questIds[i]));
         }
     }
 
@@ -167,16 +137,8 @@ public class GameController : MonoBehaviour {
         SceneManager.LoadScene(0);
     }
 
-    public QuestsBase getQuest(int index)
+    public Quest getQuest(int index)
     {
         return quests[index];
-    }
-
-    public void startQuestsCount()
-    {
-        for (int i = 0; i < quests.Length; i++)
-        {
-            quests[i].run();
-        }
     }
 }

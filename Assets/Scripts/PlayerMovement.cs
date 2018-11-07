@@ -56,7 +56,6 @@ public class PlayerMovement : MonoBehaviour {
         blinkingValue = Shader.PropertyToID("_BlinkingValue");
         coinAmount = 0;
         score = 0;
-        GameController.instance.startQuestsCount();
         Invoke("run", 3);
     }
 
@@ -95,7 +94,8 @@ public class PlayerMovement : MonoBehaviour {
         {
             slide();
         }
-        /*
+        /* Mobile input
+         * 
         if (Input.touchCount == 1)
         {
             if (isSwiping)
@@ -249,6 +249,7 @@ public class PlayerMovement : MonoBehaviour {
             {
                 movementSpeed = 0;
                 animator.SetBool("Dead", true);
+                GameController.instance.endGame(coinAmount, (int)score);
                 endGame?.Invoke();
             }
             else

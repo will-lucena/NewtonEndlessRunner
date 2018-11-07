@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class MenuController : MonoBehaviour {
+public class MenuController : MonoBehaviour
+{
 
     public static System.Action<int> generateNewQuest;
 
@@ -32,10 +33,11 @@ public class MenuController : MonoBehaviour {
     {
         for (int i = 0; i < descriptionLabels.Length; i++)
         {
-            QuestsBase quest = GameController.instance.getQuest(i);
+            
+            Quest quest = GameController.instance.getQuest(i);
             descriptionLabels[i].SetText(quest.getDescription());
-            progressLabels[i].SetText(string.Format("Progress: {0}/{1}", quest.progress, quest.max));
-            rewardLabels[i].SetText(string.Format("Reward: {0}", quest.reward));
+            progressLabels[i].SetText(string.Format("Progress: {0}/{1}", quest.getProgress(), quest.getGoal()));
+            rewardLabels[i].SetText(string.Format("Reward: {0}", quest.getReward()));
 
             if (quest.isMissionFinished())
             {
@@ -47,7 +49,7 @@ public class MenuController : MonoBehaviour {
 
     public void getReward(int index)
     {
-        GameController.instance.totalCoins += GameController.instance.getQuest(index).reward;
+        GameController.instance.totalCoins += GameController.instance.getQuest(index).getReward();
         updateCoinsLabel(GameController.instance.totalCoins);
         rewardButtons[index].SetActive(false);
         generateNewQuest?.Invoke(index);
