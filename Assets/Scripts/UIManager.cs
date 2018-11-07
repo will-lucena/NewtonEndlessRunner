@@ -6,7 +6,7 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public Image[] lifeHearts;
+    private Image[] lifeHearts;
     public TextMeshProUGUI coinsLabel;
     public GameObject gameoverPanel;
     public TextMeshProUGUI scoreLabel;
@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviour
 
     public void updateLives(float currentLifes)
     {
+        lifeHearts = GetComponentsInChildren<Image>();
+
         for (int i = 0; i < lifeHearts.Length; i++)
         {
             if ((int)currentLifes > i)
@@ -42,6 +44,10 @@ public class UIManager : MonoBehaviour
     private void endGame()
     {
         gameoverPanel.SetActive(true);
+        GameController.instance.coinHitNotification -= updateCoins;
+        GameController.instance.obstacleHitNotification -= updateLives;
+        GameController.instance.updateScore -= updateScore;
+        GameController.instance.showGameoverMessage -= endGame;
         Invoke("loadMenuScene", 2f);
     }
 
