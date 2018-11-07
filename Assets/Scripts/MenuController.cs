@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
-
-    public static System.Action<int> generateNewQuest;
-
     public TextMeshProUGUI[] descriptionLabels;
     public TextMeshProUGUI[] progressLabels;
     public TextMeshProUGUI[] rewardLabels;
@@ -21,7 +19,7 @@ public class MenuController : MonoBehaviour
 
     public void loadGame()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+        SceneManager.LoadScene(1);
     }
 
     private void updateCoinsLabel(int amount)
@@ -52,7 +50,7 @@ public class MenuController : MonoBehaviour
         GameController.instance.totalCoins += GameController.instance.getQuest(index).getReward();
         updateCoinsLabel(GameController.instance.totalCoins);
         rewardButtons[index].SetActive(false);
-        generateNewQuest?.Invoke(index);
+        GameController.instance.generateQuest(index);
         updateQuestsInfos();
     }
 }

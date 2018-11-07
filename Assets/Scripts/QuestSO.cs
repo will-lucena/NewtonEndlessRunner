@@ -28,5 +28,4 @@ public class QuestSO : ScriptableObject
     {
         return progress + totalProgress >= goal;
     }
-
 }

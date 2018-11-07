@@ -10,23 +10,20 @@ public class UIManager : MonoBehaviour {
     public TextMeshProUGUI coinsLabel;
     public GameObject gameoverPanel;
     public TextMeshProUGUI scoreLabel;
-
-    private PlayerMovement playerScript;
-
+    
     private void Start()
     {
-        playerScript = FindObjectOfType<PlayerMovement>();
-        playerScript.coinHitNotification += updateCoins;
-        playerScript.obstacleHitNotification += updateLives;
-        playerScript.updateScore += updateScore;
-        playerScript.endGame += endGame;
+        GameController.instance.coinHitNotification += updateCoins;
+        GameController.instance.obstacleHitNotification += updateLives;
+        GameController.instance.updateScore += updateScore;
+        GameController.instance.showGameoverMessage += endGame;
     }
 
-    public void updateLives(int currentLifes)
+    public void updateLives(float currentLifes)
     {
         for (int i = 0; i < lifeHearts.Length; i++)
         {
-            if (currentLifes > i)
+            if ((int)currentLifes > i)
             {
                 lifeHearts[i].color = Color.white;
             }
@@ -37,16 +34,15 @@ public class UIManager : MonoBehaviour {
         }
     }
 
-    public void updateCoins(int amount)
+    public void updateCoins(float amount)
     {
-        coinsLabel.SetText(string.Format("x{0}", amount));
+        coinsLabel.SetText(string.Format("x{0}", (int)amount));
     }
 
     private void endGame()
     {
         gameoverPanel.SetActive(true);
         Invoke("loadMenuScene", 2f);
-        
     }
 
     private void loadMenuScene()
@@ -54,9 +50,9 @@ public class UIManager : MonoBehaviour {
         GameController.instance.loadMenu();
     }
 
-    private void updateScore(int score)
+    private void updateScore(float score)
     {
-        scoreLabel.SetText(string.Format("Score: {0}m", score));
+        scoreLabel.SetText(string.Format("Score: {0}m", (int)score));
     }
 
 }

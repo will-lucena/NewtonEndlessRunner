@@ -1,14 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour {
-
-    public System.Action<int> obstacleHitNotification;
-    public System.Action<int> coinHitNotification;
-    public System.Action endGame;
-    public System.Action<int> updateScore;
-
+public class Player : MonoBehaviour
+{
     private float movementSpeed;
     public float slideSpeed;
     public int lifes;
@@ -46,7 +40,7 @@ public class PlayerMovement : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
         boxCollider = GetComponent<BoxCollider>();
-        Track.increaseSpeed += updateSpeed;
+        GameController.instance.increaseSpeed += updateSpeed;
     }
 
     private void Start()
@@ -75,7 +69,7 @@ public class PlayerMovement : MonoBehaviour {
 
         score += Time.deltaTime * movementSpeed;
 
-        updateScore?.Invoke((int)score);
+        GameController.instance.updateUI(UIComponent.Score, score);
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
@@ -94,6 +88,7 @@ public class PlayerMovement : MonoBehaviour {
         {
             slide();
         }
+
         /* Mobile input
          * 
         if (Input.touchCount == 1)
@@ -244,13 +239,12 @@ public class PlayerMovement : MonoBehaviour {
             animator.SetTrigger("Hit");
             movementSpeed = 0;
             canMove = false;
-            obstacleHitNotification?.Invoke(currentLife);
+            GameController.instance.updateUI(UIComponent.Heart, currentLife);
             if (currentLife == 0)
             {
                 movementSpeed = 0;
                 animator.SetBool("Dead", true);
                 GameController.instance.endGame(coinAmount, (int)score);
-                endGame?.Invoke();
             }
             else
             {
@@ -261,7 +255,7 @@ public class PlayerMovement : MonoBehaviour {
         else if (other.CompareTag("Coin"))
         {
             coinAmount++;
-            coinHitNotification?.Invoke(coinAmount);
+            GameController.instance.updateUI(UIComponent.Coin, coinAmount);
             other.gameObject.SetActive(false);
         }
     }

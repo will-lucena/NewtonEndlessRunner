@@ -22,8 +22,21 @@ public class PlayerData
 
 }
 
+public enum UIComponent
+{
+    Score,
+    Heart,
+    Coin
+}
+
 public class GameController : MonoBehaviour
 {
+    public Action<float> increaseSpeed;
+    public Action<float> updateScore;
+    public Action<float> obstacleHitNotification;
+    public Action<float> coinHitNotification;
+    public Action showGameoverMessage;
+
     public static GameController instance;
     public int totalCoins;
 
@@ -44,11 +57,26 @@ public class GameController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         filePath = Application.persistentDataPath + "/gameData.data";
-        MenuController.generateNewQuest += generateQuest;
 
         availableQuests = loadAvailableQuests();
 
         generateQuests();
+    }
+
+    public void updateUI(UIComponent key, float valor)
+    {
+        switch (key)
+        {
+            case UIComponent.Score:
+                updateScore?.Invoke(valor);
+                break;
+            case UIComponent.Coin:
+                coinHitNotification?.Invoke(valor);
+                break;
+            case UIComponent.Heart:
+                obstacleHitNotification?.Invoke(valor);
+                break;
+        }
     }
 
     private List<QuestSO> loadAvailableQuests()
@@ -75,7 +103,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void generateQuest(int i)
+    public void generateQuest(int i)
     {
         quests[i] = new Quest(availableQuests[Random.Range(0, availableQuests.Count)]);
     }
@@ -85,6 +113,12 @@ public class GameController : MonoBehaviour
         totalCoins += coins;
         updatedQuestsProgress(progress);
         save();
+        showGameoverMessage?.Invoke();
+    }
+
+    public void updateSpeed(float valor)
+    {
+        increaseSpeed?.Invoke(valor);
     }
 
     private void updatedQuestsProgress(int progress)
