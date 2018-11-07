@@ -9,6 +9,7 @@ public abstract class QuestsBase : MonoBehaviour
     public int reward;
     public PlayerMovement player;
     public int currentProgress;
+    public QuestsType type;
 
     public abstract void created();
     public abstract string getDescription();
@@ -39,6 +40,7 @@ public class SingleRun : QuestsBase
         reward = rewards[index];
         max = values[index];
         progress = 0;
+        type = QuestsType.SingleRun;
     }
 
     public override string getDescription()
@@ -72,6 +74,7 @@ public class TotalDistance : QuestsBase
         reward = hightRewards[index];
         max = highValues[index];
         progress = 0;
+        type = QuestsType.TotalDistance;
     }
 
     public override string getDescription()
@@ -105,6 +108,7 @@ public class FishesSingleRun : QuestsBase
         reward = rewards[index];
         max = values[index];
         progress = 0;
+        type = QuestsType.FishesSingleRun;
     }
 
     public override string getDescription()
@@ -114,7 +118,7 @@ public class FishesSingleRun : QuestsBase
 
     public override void run()
     {
-        progress += currentProgress;
+        progress = currentProgress;
         player = FindObjectOfType<PlayerMovement>();
     }
 

@@ -16,7 +16,7 @@ public class MenuController : MonoBehaviour {
         {
             QuestsBase quest = GameController.instance.getQuest(i);
             descriptionLabels[i].SetText(quest.getDescription());
-            progressLabels[i].SetText(string.Format("Progress: {0}/{1}", quest.currentProgress, quest.max));
+            progressLabels[i].SetText(string.Format("Progress: {0}/{1}", quest.progress, quest.max));
             rewardLabels[i].SetText(string.Format("Reward: {0}", quest.reward));
 
             if (quest.isMissionFinished())
@@ -24,6 +24,7 @@ public class MenuController : MonoBehaviour {
                 rewardButtons[i].SetActive(true);
             }
         }
+        GameController.instance.save();
     }
 
     public void loadGame()
