@@ -29,11 +29,14 @@ public enum UIComponent
 
 public class GameController : MonoBehaviour
 {
+    public Func<Obstacle, Vector3> consumeShield;
     public Action<float> increaseSpeed;
     public Action<float> updateScore;
     public Action<float> obstacleHitNotification;
     public Action<float> coinHitNotification;
     public Action showGameoverMessage;
+    public Action unsubscribeMethods;
+    public Action enableShield;
 
     public static GameController instance;
     public int totalCoins;
@@ -64,6 +67,16 @@ public class GameController : MonoBehaviour
             generateQuests();
         }
         DontDestroyOnLoad(gameObject);
+    }
+
+    public Vector3 useShield(Obstacle obstacle)
+    {
+        return consumeShield.Invoke(obstacle);
+    }
+
+    public void activeShield()
+    {
+        enableShield?.Invoke();
     }
 
     public void updateUI(UIComponent key, float valor)
@@ -182,6 +195,7 @@ public class GameController : MonoBehaviour
 
     public void loadMenu()
     {
+        unsubscribeMethods?.Invoke();
         SceneManager.LoadScene(0);
     }
 

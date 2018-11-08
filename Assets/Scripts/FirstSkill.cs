@@ -24,12 +24,12 @@ public class FirstSkill : MonoBehaviour
         if (Input.GetKeyDown(skillKey) && isAvailable(clock))
         {
             clock = 0;
-            Debug.Log("used");
+            Debug.Log("pushed");
             effect();
         }
         else if (Input.GetKeyDown(skillKey) && !isAvailable(clock))
         {
-            Debug.Log(string.Format("wait more {0:#.##} seconds", cooldown - clock));
+            Debug.Log(string.Format("wait more {0:#.##} seconds to push again", cooldown - clock));
         }
     }
 
@@ -47,5 +47,4 @@ public class FirstSkill : MonoBehaviour
             hit.transform.GetComponentInParent<Obstacle>().pushTo(newPosition);
         }
     }
-
 }

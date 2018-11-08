@@ -45933,6 +45933,22 @@ MonoBehaviour:
   cooldown: 2
   range: 30
   force: 10
+--- !u!114 &2029735914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2029735909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4ebd2d3412d03d4fb9102b0f9f0d9f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillKey: 99
+  name: Third law
+  description: Push up the obstacle and push back you
+  cooldown: 3
+  force: 12
 --- !u!1 &2029794758
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,16 @@ public class UIManager : MonoBehaviour
         GameController.instance.obstacleHitNotification += updateLives;
         GameController.instance.updateScore += updateScore;
         GameController.instance.showGameoverMessage += endGame;
+        GameController.instance.unsubscribeMethods += reset;
+    }
+
+    private void reset()
+    {
+        GameController.instance.coinHitNotification -= updateCoins;
+        GameController.instance.obstacleHitNotification -= updateLives;
+        GameController.instance.updateScore -= updateScore;
+        GameController.instance.showGameoverMessage -= endGame;
+        GameController.instance.unsubscribeMethods -= reset;
     }
 
     public void updateLives(float currentLives)
@@ -42,10 +52,6 @@ public class UIManager : MonoBehaviour
     private void endGame()
     {
         gameoverPanel.SetActive(true);
-        GameController.instance.coinHitNotification -= updateCoins;
-        GameController.instance.obstacleHitNotification -= updateLives;
-        GameController.instance.updateScore -= updateScore;
-        GameController.instance.showGameoverMessage -= endGame;
         Invoke("loadMenuScene", 2f);
     }
 
