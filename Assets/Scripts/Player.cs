@@ -244,6 +244,7 @@ public class Player : MonoBehaviour
             {
                 movementSpeed = 0;
                 animator.SetBool("Dead", true);
+                GameController.instance.increaseSpeed -= updateSpeed;
                 GameController.instance.endGame(coinAmount, (int)score);
             }
             else

@@ -24,8 +24,8 @@ public class QuestSO : ScriptableObject
         }
     }
     
-    public bool isCompleted(int progress = 0)
+    public bool isCompleted()
     {
-        return progress + totalProgress >= goal;
+        return totalProgress >= goal || GameController.instance.lastRunDuration >= goal;
     }
 }

@@ -6,7 +6,7 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    private Image[] lifeHearts;
+    public Image[] lifeHearts;
     public TextMeshProUGUI coinsLabel;
     public GameObject gameoverPanel;
     public TextMeshProUGUI scoreLabel;
@@ -19,13 +19,11 @@ public class UIManager : MonoBehaviour
         GameController.instance.showGameoverMessage += endGame;
     }
 
-    public void updateLives(float currentLifes)
+    public void updateLives(float currentLives)
     {
-        lifeHearts = GetComponentsInChildren<Image>();
-
         for (int i = 0; i < lifeHearts.Length; i++)
         {
-            if ((int)currentLifes > i)
+            if ((int)currentLives > i)
             {
                 lifeHearts[i].color = Color.white;
             }

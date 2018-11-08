@@ -49,6 +49,7 @@ public class MenuController : MonoBehaviour
         GameController.instance.totalCoins += GameController.instance.getQuest(index).getReward();
         rewardButtons[index].SetActive(false);
         GameController.instance.generateQuest(index);
+        GameController.instance.lastRunDuration = 0;
         GameController.instance.save();
         updateQuestsInfos();
     }

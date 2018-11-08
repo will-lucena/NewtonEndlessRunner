@@ -1,24 +1,15 @@
-﻿using UnityEngine;
-
-public class Quest
+﻿public class Quest
 {
-    private int currentProgress;
     private QuestSO data;
 
     public Quest(QuestSO data)
     {
-        currentProgress = 0;
         this.data = data;
     }
 
     public int getProgress()
     {
-        return currentProgress > data.totalProgress ? currentProgress : data.totalProgress;
-    }
-
-    public void setProgress(int progress)
-    {
-        currentProgress = progress;
+        return GameController.instance.lastRunDuration > data.totalProgress ? GameController.instance.lastRunDuration : data.totalProgress;
     }
 
     public int getGoal()
@@ -38,7 +29,7 @@ public class Quest
 
     public bool isCompleted()
     {
-        return data.isCompleted(currentProgress);
+        return data.isCompleted();
     }
 
     public QuestType getType()
@@ -53,8 +44,7 @@ public class Quest
 
     public void addProgress()
     {
-        Debug.Log(currentProgress);
-        data.totalProgress += currentProgress;
+        data.totalProgress += GameController.instance.lastRunDuration;
     }
 }
 

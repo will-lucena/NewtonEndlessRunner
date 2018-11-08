@@ -18,7 +18,6 @@ public class PlayerData
         questIds = new List<int>();
         coinsCollected = 0;
     }
-
 }
 
 public enum UIComponent
@@ -38,9 +37,11 @@ public class GameController : MonoBehaviour
 
     public static GameController instance;
     public int totalCoins;
+    public int lastRunDuration;
 
     private Quest[] quests;
     public List<QuestSO> availableQuests;
+    public List<QuestSO> questsBase;
     private string filePath;
 
     private void Awake()
@@ -50,6 +51,7 @@ public class GameController : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            availableQuests = new List<QuestSO>();
         }
 
         if (instance != this)
@@ -58,7 +60,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            availableQuests = loadAvailableQuests();
+            questsBase = loadAvailableQuests();
             generateQuests();
         }
         DontDestroyOnLoad(gameObject);
@@ -82,14 +84,13 @@ public class GameController : MonoBehaviour
 
     private List<QuestSO> loadAvailableQuests()
     {
-        List<QuestSO> list = Resources.LoadAll<QuestSO>("Quests/").ToList();
-        return list.FindAll(item => item.isCompleted() == false);
+        return Resources.LoadAll<QuestSO>("Quests/").ToList();
     }
 
     private void generateQuests()
     {
         quests = new Quest[2];
-
+        availableQuests.AddRange(questsBase);
         if (File.Exists(filePath))
         {
             load();
@@ -106,13 +107,31 @@ public class GameController : MonoBehaviour
     public void generateQuest(int i)
     {
         QuestSO selectedQuest = availableQuests[Random.Range(0, availableQuests.Count)];
+        QuestSO completedQuest = null;
+
+        if (quests[i] != null)
+        {
+            completedQuest = questsBase.Find(item => quests[i].getId() == item.id);
+        }
+
         quests[i] = new Quest(selectedQuest);
+        availableQuests.Remove(selectedQuest);
+
+        if (availableQuests.Count == 0)
+        {
+            List<QuestSO> newList = questsBase.Intersect(availableQuests).ToList();
+            newList.Add(completedQuest);
+
+            availableQuests.Clear();
+            availableQuests.AddRange(newList);
+            availableQuests.ForEach(item => item.totalProgress = 0);
+        }
     }
 
     public void endGame(int coins, int progress)
     {
         totalCoins += coins;
-        updatedQuestsProgress(progress);
+        lastRunDuration = progress;
         save();
         showGameoverMessage?.Invoke();
     }
@@ -120,14 +139,6 @@ public class GameController : MonoBehaviour
     public void updateSpeed(float valor)
     {
         increaseSpeed?.Invoke(valor);
-    }
-
-    private void updatedQuestsProgress(int progress)
-    {
-        foreach(Quest quest in quests)
-        {
-            quest.setProgress(progress);
-        }
     }
 
     public void save()
@@ -144,7 +155,6 @@ public class GameController : MonoBehaviour
             {
                 quests[i].addProgress();
             }
-
             data.questIds.Add(quests[i].getId());
         }
 
@@ -152,7 +162,7 @@ public class GameController : MonoBehaviour
         file.Close();
     }
 
-    public void load()
+    private void load()
     {
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream file = File.Open(filePath, FileMode.Open);
@@ -163,8 +173,11 @@ public class GameController : MonoBehaviour
 
         for (int i = 0; i < data.questIds.Count; i++)
         {
-            quests[i] = new Quest(availableQuests.Find(item => item.id == data.questIds[i]));
+            QuestSO quest = questsBase.Find(item => item.id == data.questIds[i]);
+            quests[i] = new Quest(quest);
+            availableQuests.Remove(quest);
         }
+        availableQuests.RemoveAll(item => item.isCompleted());
     }
 
     public void loadMenu()
