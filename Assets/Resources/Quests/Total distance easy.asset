@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Total distance easy
   m_EditorClassIdentifier: 
   id: 2
-  goal: 10000
+  goal: 1000
   reward: 100
-  totalProgress: 622
+  totalProgress: 0
   type: 1

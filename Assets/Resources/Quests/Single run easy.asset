@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Single run easy
   m_EditorClassIdentifier: 
   id: 0
-  goal: 1000
+  goal: 50
   reward: 10
   totalProgress: 0
   type: 0
