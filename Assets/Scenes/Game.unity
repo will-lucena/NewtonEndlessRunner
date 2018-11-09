@@ -45949,6 +45949,26 @@ MonoBehaviour:
   description: Push up the obstacle and push back you
   cooldown: 3
   force: 12
+--- !u!114 &2029735915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2029735909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d63da7c79a0f9374b9a09cae4a813293, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillKey: 120
+  name: Second law
+  description: Apply force holding or pushing
+  cooldown: 4
+  range: 20
+  minForce: 3
+  maxForce: 50
+  maxEnergy: 15
+  force: 5
 --- !u!1 &2029794758
 GameObject:
   m_ObjectHideFlags: 0
