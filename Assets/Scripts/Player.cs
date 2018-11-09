@@ -104,8 +104,8 @@ public class Player : MonoBehaviour
             slide();
         }
 
-        /* Mobile input
-         * 
+        //* Mobile input
+          
         if (Input.touchCount == 1)
         {
             if (isSwiping)
@@ -140,7 +140,7 @@ public class Player : MonoBehaviour
                     isSwiping = false;
                 }
             }
-            
+            /*
             else
             {
                 if (Input.GetTouch(0).position.x < Screen.width / 3)
@@ -153,7 +153,7 @@ public class Player : MonoBehaviour
                 }
 
             }
-
+            /**/
             if (Input.GetTouch(0).phase == TouchPhase.Began)
             {
                 startTouch = Input.GetTouch(0).position;

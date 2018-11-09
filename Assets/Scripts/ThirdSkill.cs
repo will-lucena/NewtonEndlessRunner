@@ -32,14 +32,21 @@ public class ThirdSkill : MonoBehaviour
         if (!isActive)
         {
             clock += Time.deltaTime;
-            if (Input.GetKeyDown(skillKey) && isAvailable(clock))
+        }
+    }
+
+    public void active()
+    {
+        if (!isActive)
+        {
+            if (isAvailable(clock))
             {
                 clock = 0;
                 Debug.Log("shield working");
                 isActive = true;
                 GameController.instance.activeShield();
             }
-            else if (Input.GetKeyDown(skillKey) && !isAvailable(clock))
+            else
             {
                 Debug.Log(string.Format("wait more {0:#.##} seconds to use shield again", cooldown - clock));
             }
