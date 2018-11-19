@@ -1,0 +1,91 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SecondSkill : MonoBehaviour
+{
+    public KeyCode skillKey;
+    public new string name;
+    public string description;
+    public int cooldown;
+    public float range;
+    public float minForce;
+    public float maxForce;
+    public int maxEnergy;
+    public int force;
+
+    private float clock;
+    private float currentEnergy;
+    private float timeCharging;
+
+    private void Start()
+    {
+        clock = cooldown;
+        currentEnergy = maxEnergy;
+    }
+
+    private void Update()
+    {
+        //verificar se tem energia
+
+        if (Input.GetKey(skillKey) && hasEnergy() && isAvailable(clock))
+        {
+            timeCharging += Time.deltaTime;
+            if (timeCharging >= currentEnergy || timeCharging * force >= maxForce)
+            {
+                Debug.Log(string.Format("Skill used with force = {0}, forced", timeCharging));
+                releaseSkill(timeCharging * force);
+            }
+        }
+
+        if (timeCharging > 0 && Input.GetKeyUp(skillKey))
+        {
+            float force = minForce > timeCharging * this.force ? minForce : timeCharging * this.force;
+            Debug.Log(string.Format("Skill used with force = {0}, released", force));
+            releaseSkill(force);
+        }
+
+        if (!hasEnergy())
+        {
+            clock += Time.deltaTime;
+            if (!isAvailable(clock))
+            {
+                Debug.Log(string.Format("wait more {0:#.##} seconds to push again", cooldown - clock));
+                return;
+            }
+            currentEnergy = maxEnergy;
+        }
+    }
+
+    private bool isAvailable(float time)
+    {
+        return time >= cooldown;
+    }
+
+    private bool hasEnergy()
+    {
+        return currentEnergy >= minForce;
+    }
+
+    private void releaseSkill(float forceToUse)
+    {
+        effect(forceToUse);
+
+        timeCharging = 0;
+        currentEnergy -= forceToUse;
+        if (!hasEnergy())
+        {
+            clock = 0;
+        }
+    }
+
+    private void effect(float force)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(new Ray(new Vector3(transform.position.x, 0.5f, transform.position.z), Vector3.forward), out hit, range))
+        {
+            Vector3 newPosition = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z + force);
+            hit.transform.GetComponentInParent<Obstacle>().pushTo(newPosition);
+        }
+    }
+}

@@ -17215,6 +17215,50 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 727617811}
   m_Mesh: {fileID: 4300002, guid: 5dc9820c76494354e9e924a6c791efa7, type: 3}
+--- !u!1 &730555321
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 730555323}
+  - component: {fileID: 730555322}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &730555322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 730555321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd38914bc736e474dbf3db80bd1b9910, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalCoins: 0
+  lastRunDuration: 0
+  availableQuests: []
+  questsBase: []
+--- !u!4 &730555323
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 730555321}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0000333786, y: 0.5705161, z: -4.159334}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &730587722
 GameObject:
   m_ObjectHideFlags: 0
@@ -45872,6 +45916,59 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.7437724, y: 1.1494612, z: 0.5180481}
   m_Center: {x: -0.000000059604645, y: 0.5780397, z: 0.009150952}
+--- !u!114 &2029735913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2029735909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3778b47067b2ab44f98d748745c41f75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillKey: 122
+  name: First law
+  description: Push some obstacle
+  cooldown: 2
+  range: 30
+  force: 10
+--- !u!114 &2029735914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2029735909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4ebd2d3412d03d4fb9102b0f9f0d9f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillKey: 99
+  name: Third law
+  description: Push up the obstacle and push back you
+  cooldown: 3
+  force: 12
+--- !u!114 &2029735915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2029735909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d63da7c79a0f9374b9a09cae4a813293, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillKey: 120
+  name: Second law
+  description: Apply force holding or pushing
+  cooldown: 4
+  range: 20
+  minForce: 3
+  maxForce: 50
+  maxEnergy: 15
+  force: 5
 --- !u!1 &2029794758
 GameObject:
   m_ObjectHideFlags: 0

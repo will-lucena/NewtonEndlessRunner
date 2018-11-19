@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
     [HideInInspector] public int coinAmount;
     [HideInInspector] public float score;
     private bool canMove;
+    private bool hasShield;
 
     private void Awake()
     {
@@ -41,6 +42,20 @@ public class Player : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         boxCollider = GetComponent<BoxCollider>();
         GameController.instance.increaseSpeed += updateSpeed;
+        GameController.instance.unsubscribeMethods += reset;
+        GameController.instance.enableShield += activeShield;
+    }
+
+    private void activeShield()
+    {
+        hasShield = true;
+    }
+
+    private void reset()
+    {
+        GameController.instance.increaseSpeed -= updateSpeed;
+        GameController.instance.enableShield -= activeShield;
+        GameController.instance.unsubscribeMethods -= reset;
     }
 
     private void Start()
@@ -235,22 +250,30 @@ public class Player : MonoBehaviour
         }
         if (other.CompareTag("Obstacle"))
         {
-            currentLife--;
-            animator.SetTrigger("Hit");
-            movementSpeed = 0;
-            canMove = false;
-            GameController.instance.updateUI(UIComponent.Heart, currentLife);
-            if (currentLife == 0)
+            if (!hasShield)
             {
+                currentLife--;
+                animator.SetTrigger("Hit");
                 movementSpeed = 0;
-                animator.SetBool("Dead", true);
-                GameController.instance.increaseSpeed -= updateSpeed;
-                GameController.instance.endGame(coinAmount, (int)score);
+                canMove = false;
+                GameController.instance.updateUI(UIComponent.Heart, currentLife);
+                if (currentLife == 0)
+                {
+                    movementSpeed = 0;
+                    animator.SetBool("Dead", true);
+                    GameController.instance.increaseSpeed -= updateSpeed;
+                    GameController.instance.endGame(coinAmount, (int)score);
+                }
+                else
+                {
+                    Invoke("move", 0.75f);
+                    StartCoroutine(invencibleRoutine(invencibleTime));
+                }
             }
             else
             {
-                Invoke("move", 0.75f);
-                StartCoroutine(invencibleRoutine(invencibleTime));
+                hasShield = false;
+                transform.position = GameController.instance.useShield(other.GetComponent<Obstacle>());
             }
         }
         else if (other.CompareTag("Coin"))
