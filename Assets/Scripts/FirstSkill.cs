@@ -47,4 +47,18 @@ public class FirstSkill : MonoBehaviour
             hit.transform.GetComponentInParent<Obstacle>().pushTo(newPosition);
         }
     }
+
+    public void activateSkill()
+    {
+        if (isAvailable(clock))
+        {
+            clock = 0;
+            Debug.Log("pushed");
+            effect();
+        }
+        else
+        {
+            Debug.Log(string.Format("wait more {0:#.##} seconds to push again", cooldown - clock));
+        }
+    }
 }

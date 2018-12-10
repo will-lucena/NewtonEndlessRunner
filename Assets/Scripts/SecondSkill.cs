@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class SecondSkill : MonoBehaviour
 {
@@ -17,6 +20,7 @@ public class SecondSkill : MonoBehaviour
     private float clock;
     private float currentEnergy;
     private float timeCharging;
+    private bool isPressed;
 
     private void Start()
     {
@@ -26,8 +30,27 @@ public class SecondSkill : MonoBehaviour
 
     private void Update()
     {
-        //verificar se tem energia
 
+        if (isPressed)
+        {
+            if (hasEnergy() && isAvailable(clock))
+            {
+                timeCharging += Time.deltaTime;
+                if (timeCharging >= currentEnergy || timeCharging * force >= maxForce)
+                {
+                    Debug.Log(string.Format("Skill used with force = {0}, forced", timeCharging));
+                    releaseSkill(timeCharging * force);
+                }
+            }
+        }
+        else if (timeCharging > 0)
+        {
+            float force = minForce > timeCharging * this.force ? minForce : timeCharging * this.force;
+            Debug.Log(string.Format("Skill used with force = {0}, released", force));
+            releaseSkill(force);
+        }
+        //verificar se tem energia
+        /*
         if (Input.GetKey(skillKey) && hasEnergy() && isAvailable(clock))
         {
             timeCharging += Time.deltaTime;
@@ -44,6 +67,7 @@ public class SecondSkill : MonoBehaviour
             Debug.Log(string.Format("Skill used with force = {0}, released", force));
             releaseSkill(force);
         }
+        /**/
 
         if (!hasEnergy())
         {
@@ -87,5 +111,10 @@ public class SecondSkill : MonoBehaviour
             Vector3 newPosition = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z + force);
             hit.transform.GetComponentInParent<Obstacle>().pushTo(newPosition);
         }
+    }
+
+    public void activateSkill(bool isPressed)
+    {
+        this.isPressed = isPressed;
     }
 }

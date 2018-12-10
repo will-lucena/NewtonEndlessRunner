@@ -32,6 +32,7 @@ public class ThirdSkill : MonoBehaviour
         if (!isActive)
         {
             clock += Time.deltaTime;
+            /*
             if (Input.GetKeyDown(skillKey) && isAvailable(clock))
             {
                 clock = 0;
@@ -43,6 +44,7 @@ public class ThirdSkill : MonoBehaviour
             {
                 Debug.Log(string.Format("wait more {0:#.##} seconds to use shield again", cooldown - clock));
             }
+            /**/
         }
     }
 
@@ -56,6 +58,21 @@ public class ThirdSkill : MonoBehaviour
         obstacle.pushTo(new Vector3(obstacle.transform.position.x, obstacle.transform.position.y, obstacle.transform.position.z + force));
         isActive = false;
         return new Vector3(transform.position.x, transform.position.y, transform.position.z - force);
+    }
+
+    public void activateSkill()
+    {
+        if (isAvailable(clock))
+        {
+            clock = 0;
+            Debug.Log("shield working");
+            isActive = true;
+            GameController.instance.activeShield();
+        }
+        else if (!isAvailable(clock))
+        {
+            Debug.Log(string.Format("wait more {0:#.##} seconds to use shield again", cooldown - clock));
+        }
     }
 
 }
