@@ -39,10 +39,7 @@ public abstract class Skill : MonoBehaviour
     [SerializeField] protected float force;
     [SerializeField] protected SkillReloadUIEffect reloadUI;
 
-    public virtual void activateSkill(bool boolean = false)
-    {
-
-    }
+    public abstract void activateSkill(bool boolean = false);
 }
 
 public class GameController : MonoBehaviour
