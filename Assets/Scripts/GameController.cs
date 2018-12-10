@@ -27,6 +27,24 @@ public enum UIComponent
     Coin
 }
 
+[Serializable]
+public abstract class Skill : MonoBehaviour
+{
+    public Action<float> notifyReload;
+
+    [SerializeField] protected KeyCode skillKey;
+    [SerializeField] protected new string name;
+    [SerializeField] protected string description;
+    [SerializeField] protected int cooldown;
+    [SerializeField] protected float force;
+    [SerializeField] protected SkillReloadUIEffect reloadUI;
+
+    public virtual void activateSkill(bool boolean = false)
+    {
+
+    }
+}
+
 public class GameController : MonoBehaviour
 {
     public Func<Obstacle, Vector3> consumeShield;

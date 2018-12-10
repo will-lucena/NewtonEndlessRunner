@@ -2,14 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdSkill : MonoBehaviour
+public class ThirdSkill : Skill
 {
-    public KeyCode skillKey;
-    public new string name;
-    public string description;
-    public int cooldown;
-    public float force;
-
     private float clock;
     private bool isActive;
 
@@ -19,6 +13,7 @@ public class ThirdSkill : MonoBehaviour
         isActive = false;
         GameController.instance.consumeShield += effect;
         GameController.instance.unsubscribeMethods += reset;
+        reloadUI.setSkillScript(this);
     }
 
     private void reset()
@@ -45,6 +40,7 @@ public class ThirdSkill : MonoBehaviour
                 Debug.Log(string.Format("wait more {0:#.##} seconds to use shield again", cooldown - clock));
             }
             /**/
+            notifyReload?.Invoke(clock / cooldown);
         }
     }
 
@@ -60,7 +56,7 @@ public class ThirdSkill : MonoBehaviour
         return new Vector3(transform.position.x, transform.position.y, transform.position.z - force);
     }
 
-    public void activateSkill()
+    public override void activateSkill(bool boolean = false)
     {
         if (isAvailable(clock))
         {
