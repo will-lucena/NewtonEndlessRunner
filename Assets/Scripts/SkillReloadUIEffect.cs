@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class SkillReloadUIEffect : MonoBehaviour
 {
     private Image mask;
-    [SerializeField] private Skill skill;
 
     private void Start()
     {
@@ -33,7 +32,6 @@ public class SkillReloadUIEffect : MonoBehaviour
 
     public void setSkillScript(Skill skill)
     {
-        this.skill = skill;
         skill.notifyReload += fillMask;
     }
 }

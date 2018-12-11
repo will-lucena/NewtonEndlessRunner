@@ -83,29 +83,10 @@ public class Player : MonoBehaviour
         }
 
         score += Time.deltaTime * movementSpeed;
-
         GameController.instance.updateUI(UIComponent.Score, score);
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            changeRoad(1);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            changeRoad(-1);
-        }
+        #if UNITY_ANDROID && !UNITY_EDITOR
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            jump();
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            slide();
-        }
-
-        /* Mobile input
-         * 
         if (Input.touchCount == 1)
         {
             if (isSwiping)
@@ -140,20 +121,7 @@ public class Player : MonoBehaviour
                     isSwiping = false;
                 }
             }
-            
-            else
-            {
-                if (Input.GetTouch(0).position.x < Screen.width / 3)
-                {
-                    changeRoad(-1);
-                }
-                else if (Input.GetTouch(0).position.x > (Screen.width / 3) * 2)
-                {
-                    changeRoad(1);
-                }
-
-            }
-
+           
             if (Input.GetTouch(0).phase == TouchPhase.Began)
             {
                 startTouch = Input.GetTouch(0).position;
@@ -164,7 +132,25 @@ public class Player : MonoBehaviour
                 isSwiping = false;
             }
         }
-        /**/
+        #else
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            changeRoad(1);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            changeRoad(-1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            jump();
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            slide();
+        }
+        #endif
 
         if (jumping)
         {
@@ -194,7 +180,6 @@ public class Player : MonoBehaviour
                 boxCollider.size = boxColliderSize;
             }
         }
-
         Vector3 target = new Vector3(movementVector.x, movementVector.y, transform.position.z);
         transform.position = Vector3.MoveTowards(transform.position, target, slideSpeed * Time.deltaTime);
     }
