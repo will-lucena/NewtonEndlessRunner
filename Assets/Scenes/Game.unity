@@ -27768,8 +27768,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obstacles:
   - {fileID: 1000011638144408, guid: 22facfbe232a90b45b681c638f2e490d, type: 2}
-  - {fileID: 1000011769374998, guid: b19a0bd8ede69fe4683dff84150a047b, type: 2}
   - {fileID: 1000013842435444, guid: d68ac797bf384f84bbca159dc2a6e4d7, type: 2}
+  - {fileID: 1000011769374998, guid: b19a0bd8ede69fe4683dff84150a047b, type: 2}
   coinPrefab: {fileID: 1137032800507188, guid: e4286c68d44c1dc43ae65e40b1c0f498, type: 2}
   currentObstacles: []
   currentCoins: []
@@ -49359,8 +49359,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obstacles:
   - {fileID: 1000011638144408, guid: 22facfbe232a90b45b681c638f2e490d, type: 2}
-  - {fileID: 1000011769374998, guid: b19a0bd8ede69fe4683dff84150a047b, type: 2}
   - {fileID: 1000013842435444, guid: d68ac797bf384f84bbca159dc2a6e4d7, type: 2}
+  - {fileID: 1000011769374998, guid: b19a0bd8ede69fe4683dff84150a047b, type: 2}
   coinPrefab: {fileID: 1137032800507188, guid: e4286c68d44c1dc43ae65e40b1c0f498, type: 2}
   currentObstacles: []
   currentCoins: []
