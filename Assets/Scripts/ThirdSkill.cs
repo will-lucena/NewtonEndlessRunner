@@ -6,6 +6,7 @@ public class ThirdSkill : Skill
 {
     private float clock;
     private bool isActive;
+    public GameObject vfx;
 
     private void Start()
     {
@@ -53,6 +54,7 @@ public class ThirdSkill : Skill
     {
         obstacle.pushTo(new Vector3(obstacle.transform.position.x, obstacle.transform.position.y, obstacle.transform.position.z + force));
         isActive = false;
+        vfx.SetActive(false);
         return new Vector3(transform.position.x, transform.position.y, transform.position.z - force);
     }
 
@@ -64,6 +66,7 @@ public class ThirdSkill : Skill
             Debug.Log("shield working");
             isActive = true;
             GameController.instance.activeShield();
+            vfx.SetActive(true);
         }
         else if (!isAvailable(clock))
         {

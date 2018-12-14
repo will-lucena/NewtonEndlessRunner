@@ -17,6 +17,5 @@ public class Obstacle : MonoBehaviour
         particleSystem.Play();
         Vector3 startPos = transform.position;
         transform.position = Vector3.Lerp(startPos, position, duration);
-        particleSystem.Stop();
     }
 }
