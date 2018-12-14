@@ -53,4 +53,9 @@ public class MenuController : MonoBehaviour
         GameController.instance.save();
         updateQuestsInfos();
     }
+
+    public void quit()
+    {
+        Application.Quit();
+    }
 }

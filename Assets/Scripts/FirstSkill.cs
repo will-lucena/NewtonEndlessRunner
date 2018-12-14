@@ -17,19 +17,6 @@ public class FirstSkill : Skill
     private void Update()
     {
         clock += Time.deltaTime;
-        /*
-        if (Input.GetKeyDown(skillKey) && isAvailable(clock))
-        {
-            clock = 0;
-            Debug.Log("pushed");
-            effect();
-        }
-        else if (Input.GetKeyDown(skillKey) && !isAvailable(clock))
-        {
-            notifyReload?.Invoke(Mathf.Clamp01((cooldown - clock) / 100));
-            Debug.Log(string.Format("wait more {0:#.##} seconds to push again", cooldown - clock));
-        }
-        /**/
         if (!isAvailable(clock))
         {
             notifyReload?.Invoke(clock / cooldown);
@@ -62,10 +49,6 @@ public class FirstSkill : Skill
             clock = 0;
             Debug.Log("pushed");
             effect();
-        }
-        else
-        {
-            Debug.Log(string.Format("wait more {0:#.##} seconds to push again", cooldown - clock));
         }
     }
 }

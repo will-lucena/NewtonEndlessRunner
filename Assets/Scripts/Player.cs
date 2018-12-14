@@ -289,7 +289,6 @@ public class Player : MonoBehaviour
         while(timer < time && invencible)
         {
             model.SetActive(enabled);
-            //Shader.SetGlobalFloat(blinkingValue, currentBlink);
             yield return null;
             timer += Time.deltaTime;
             lastBlink += Time.deltaTime;
@@ -300,7 +299,6 @@ public class Player : MonoBehaviour
                 enabled = !enabled;
             }
         }
-        //Shader.SetGlobalFloat(blinkingValue, 0);
         invencible = false;
         model.SetActive(true);
     }
@@ -308,7 +306,6 @@ public class Player : MonoBehaviour
     private void updateSpeed(float speedModifier)
     {
         movementSpeed *= speedModifier;
-        Debug.Log(movementSpeed);
         if (movementSpeed > maxSpeed)
         {
             movementSpeed = maxSpeed;

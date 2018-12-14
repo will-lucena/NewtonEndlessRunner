@@ -28,19 +28,6 @@ public class ThirdSkill : Skill
         if (!isActive)
         {
             clock += Time.deltaTime;
-            /*
-            if (Input.GetKeyDown(skillKey) && isAvailable(clock))
-            {
-                clock = 0;
-                Debug.Log("shield working");
-                isActive = true;
-                GameController.instance.activeShield();
-            }
-            else if (Input.GetKeyDown(skillKey) && !isAvailable(clock))
-            {
-                Debug.Log(string.Format("wait more {0:#.##} seconds to use shield again", cooldown - clock));
-            }
-            /**/
             notifyReload?.Invoke(clock / cooldown);
         }
     }
@@ -67,10 +54,6 @@ public class ThirdSkill : Skill
             isActive = true;
             GameController.instance.activeShield();
             vfx.SetActive(true);
-        }
-        else if (!isAvailable(clock))
-        {
-            Debug.Log(string.Format("wait more {0:#.##} seconds to use shield again", cooldown - clock));
         }
     }
 

@@ -33,7 +33,6 @@ public class SecondSkill : Skill
                 timeCharging += Time.deltaTime;
                 if (timeCharging >= currentEnergy || timeCharging * force >= maxForce)
                 {
-                    Debug.Log(string.Format("Skill used with force = {0}, forced", timeCharging));
                     releaseSkill(timeCharging * force);
                 }
             }
@@ -41,28 +40,8 @@ public class SecondSkill : Skill
         else if (timeCharging > 0)
         {
             float force = minForce > timeCharging * this.force ? minForce : timeCharging * this.force;
-            Debug.Log(string.Format("Skill used with force = {0}, released", force));
             releaseSkill(force);
         }
-        //verificar se tem energia
-        /*
-        if (Input.GetKey(skillKey) && hasEnergy() && isAvailable(clock))
-        {
-            timeCharging += Time.deltaTime;
-            if (timeCharging >= currentEnergy || timeCharging * force >= maxForce)
-            {
-                Debug.Log(string.Format("Skill used with force = {0}, forced", timeCharging));
-                releaseSkill(timeCharging * force);
-            }
-        }
-
-        if (timeCharging > 0 && Input.GetKeyUp(skillKey))
-        {
-            float force = minForce > timeCharging * this.force ? minForce : timeCharging * this.force;
-            Debug.Log(string.Format("Skill used with force = {0}, released", force));
-            releaseSkill(force);
-        }
-        /**/
 
         if (!hasEnergy())
         {
@@ -70,7 +49,6 @@ public class SecondSkill : Skill
             if (!isAvailable(clock))
             {
                 notifyReload?.Invoke(clock / cooldown);
-                //Debug.Log(string.Format("wait more {0:#.##} seconds to push again", cooldown - clock));
                 return;
             }
             currentEnergy = maxEnergy;
