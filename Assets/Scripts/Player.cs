@@ -41,9 +41,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
         boxCollider = GetComponent<BoxCollider>();
-        GameController.instance.increaseSpeed += updateSpeed;
-        GameController.instance.unsubscribeMethods += reset;
-        GameController.instance.enableShield += activeShield;
+        
     }
 
     private void activeShield()
@@ -60,6 +58,10 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        GameController.instance.increaseSpeed += updateSpeed;
+        GameController.instance.unsubscribeMethods += reset;
+        GameController.instance.enableShield += activeShield;
+
         boxColliderSize = boxCollider.size;
         currentLife = lifes;
         blinkingValue = Shader.PropertyToID("_BlinkingValue");
